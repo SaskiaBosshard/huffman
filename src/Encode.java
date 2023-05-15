@@ -1,9 +1,11 @@
+import javax.swing.tree.TreeNode;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * Methods to encode data with huffman encoding.
@@ -44,6 +46,9 @@ public class Encode {
      * The index represents the character (ASCII value) and the value
      * at that index represents the frequency of that character in
      * the input string.
+     *
+     * @param input an ascii String
+     * @return streamlined frequency table
      */
 
     public int[] getFrequencyTable(String input) {
@@ -53,12 +58,58 @@ public class Encode {
             fTable[c]++;
         }
 
-        int[] streamlinedTable = Arrays.stream(fTable)
+        int[] streamlinedTable = Arrays.stream(fTable) // Source: ChatGPT
                 .map(i -> (int) (Math.ceil ((double) i / input.length() * 100))) // Math.ceil -> So that frequencies between 0 and 1 are not automatically shown as 0.
                 .toArray();
 
         return streamlinedTable;
     }
+
+    /**
+     * Create a tree from a frequency table. All leaves are single characters,
+     * their parent node has the added frequency of its two children.
+     * The algorithm is taken from this source:
+     * https://www.techiedelight.com/huffman-coding/
+     * code: chatGPT
+     *
+     * @param fTable Frequency table of the ascii characters of an input String.
+     * @return root of the created tree
+     */
+
+    /*public static TreeNode createHuffmanTree(int[] fTable) {
+        PriorityQueue<TreeNode> minHeap = new PriorityQueue<>((a, b) -> a.frequency - b.frequency);
+
+        // Step 1: Create leaf nodes for characters and add them to the priority queue
+        for (int i = 0; i < fTable.length; i++) {
+            if (fTable[i] > 0) {
+                char c = (char) i;
+                TreeNode leafNode = new TreeNode(c, fTable[i]);
+                minHeap.offer(leafNode);
+            }
+        }
+
+        // Step 2: Build the Huffman tree by combining nodes until only one node is left in the heap
+        while (minHeap.size() > 1) {
+            TreeNode leftChild = minHeap.poll();
+            TreeNode rightChild = minHeap.poll();
+
+            int combinedFrequency = leftChild.frequency + rightChild.frequency;
+            TreeNode parentNode = new TreeNode('\0', combinedFrequency);
+            parentNode.left = leftChild;
+            parentNode.right = rightChild;
+
+            minHeap.offer(parentNode);
+        }
+
+        // Step 3: Return the root node of the Huffman tree
+        return minHeap.poll();
+    }
+    
+     */
+
+
+
+
 
 
 
