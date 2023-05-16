@@ -15,7 +15,7 @@ public class Encode {
         //todo
         String inputFromFile = readFile(asciiInputPath);
         int[] frequencyTable = getFrequencyTable(inputFromFile);
-        //createMiniHeap(frequencyTable);
+        //createHuffmanTree(frequencyTable);
                 // Create a tree from the frequency table. All leaves are single characters,
                 // their parent node has the added frequency of its two children.
         //createHuffmanCode(minHeapRoot);
