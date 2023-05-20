@@ -1,4 +1,3 @@
-import javax.swing.tree.TreeNode;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -76,7 +75,7 @@ public class Encode {
      * @return root of the created tree
      */
 
-    /*public static TreeNode createHuffmanTree(int[] fTable) {
+    public static TreeNode createHuffmanTree(int[] fTable) {
         PriorityQueue<TreeNode> minHeap = new PriorityQueue<>((a, b) -> a.frequency - b.frequency);
 
         // Step 1: Create leaf nodes for characters and add them to the priority queue
@@ -104,8 +103,6 @@ public class Encode {
         // Step 3: Return the root node of the Huffman tree
         return minHeap.poll();
     }
-    
-     */
 
 
 
