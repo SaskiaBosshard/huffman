@@ -153,8 +153,6 @@ public class Encode {
             sb.append("0");
         }
 
-        //assert (sb.length() % 8 == 0); // simple test, it always has to be a multiple of BYTE_LENGTH.
-
         return sb.toString();
     }
 

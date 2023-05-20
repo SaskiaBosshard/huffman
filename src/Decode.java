@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * Decoding of input file in huffman coding and writing output into new file.
  */
 public class Decode {
-    public void decode(Path compressedHuffmanInput, Path huffmanCodeCollection, Path decompressedDataOutput) throws IOException{
+    public void decode(Path compressedHuffmanInput, Path huffmanCodeCollection, Path decompress) throws IOException{
         byte[] bytes = fileToByteArray(compressedHuffmanInput);
 
         String bitString = getBitString(bytes);
@@ -19,11 +19,10 @@ public class Decode {
         Map<String, Character> code = loadCodeCollection(Files.readString(huffmanCodeCollection, StandardCharsets.US_ASCII).trim());
         String decoded = decodeBitString(bitString, code);
 
-        Files.writeString(decompressedDataOutput, decoded);
-
+        Files.writeString(decompress, decoded);
     }
     /**
-     * Read file into byte array and return it.
+     * Read file into byte array.
      */
     public byte[] fileToByteArray(Path compressedHuffmanInput) throws IOException {
         return Files.readAllBytes(compressedHuffmanInput);
