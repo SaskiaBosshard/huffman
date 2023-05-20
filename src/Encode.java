@@ -14,13 +14,12 @@ import java.util.stream.Collectors;
  */
 public class Encode {
     public void encode(Path asciiInputPath, Path huffmanDataFile, Path codeCollection) throws IOException {
-        //todo
         String inputFromFile = readFile(asciiInputPath);
         int[] frequencyTable = getFrequencyTable(inputFromFile);
         TreeNode huffmanTree = createHuffmanTree(frequencyTable);
         Map<Character, String> code = createHuffmanCode(huffmanTree);
         writeHuffmanToFile(code, codeCollection);
-
+        //todo
         //createBitString(code, input);
                 //Create bit string from ascii input and a huffman code collection.
                 //Encoded bit string, with an additional 1 and filled up with 0 until the next multiple of 8.
