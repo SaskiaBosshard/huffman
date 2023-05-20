@@ -1,10 +1,13 @@
+//import javax.swing.tree.TreeNode;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 /**
  * Methods to encode data with huffman encoding.
@@ -14,17 +17,12 @@ public class Encode {
         //todo
         String inputFromFile = readFile(asciiInputPath);
         int[] frequencyTable = getFrequencyTable(inputFromFile);
-        //createHuffmanTree(frequencyTable);
-                // Create a tree from the frequency table. All leaves are single characters,
-                // their parent node has the added frequency of its two children.
-        //createHuffmanCode(minHeapRoot);
-                //Create the huffman code from a tree.
-                //e.g. every branch to the left adds a 0 to the way, every one to the right a 1.
-                //Once a node has no left and no right node, it's a leaf -> its path and character are added to the code collection.
-        //writeHuffmanToFile(code, codeBook);
+        TreeNode huffmanTree = createHuffmanTree(frequencyTable);
+        Map<Character, String> code = createHuffmanCode(huffmanTree);
+        writeHuffmanToFile(code, codeCollection);
 
         //createBitString(code, input);
-                //Create bit string from ascii input and a huffman code book.
+                //Create bit string from ascii input and a huffman code collection.
                 //Encoded bit string, with an additional 1 and filled up with 0 until the next multiple of 8.
         //createByteArray(bitString); bitString must be multiple of 8
                 //8 consecutive characters are 1 byte
@@ -69,7 +67,6 @@ public class Encode {
      * their parent node has the added frequency of its two children.
      * The algorithm is taken from this source:
      * https://www.techiedelight.com/huffman-coding/
-     * code: chatGPT
      *
      * @param fTable Frequency table of the ascii characters of an input String.
      * @return root of the created tree
@@ -104,10 +101,49 @@ public class Encode {
         return minHeap.poll();
     }
 
+    /**
+     * Create huffman code from a previously generates Huffman tree.
+     * Left branches adds a 0 and right branches a 1.
+     * An ascii-Character and its specific path are added to the code collection
+     * when they are a leaf (treeNode with no left or right node).
+     *
+     * Returns the ascii-character's specific path.
+     */
+    public Map<Character, String> createHuffmanCode(TreeNode rootOfTree) {
+        Map<Character, String> map = new HashMap<>();
+        traceTree(map, rootOfTree, "");
+        return map;
+    }
 
+    /**
+     * Method which allows to trace along the Huffman tree
+     * @param map  Huffman code collection / path of the ascii-character
+     * @param rootOfTree Respective root node.
+     * @param way  The path so far.
+     */
+    private void traceTree(Map<Character, String> map, TreeNode rootOfTree, String way) {
+        if (rootOfTree.left == null && rootOfTree.right == null) {
+            map.put(rootOfTree.ascii, way);
+        } else {
+            traceTree(map, rootOfTree.left, way + "0");
+            traceTree(map, rootOfTree.right, way + "1");
+        }
+    }
 
+    /**
+     * Writes a huffman code collection to a file.
+     * Example of the created format: 10:1010111-13:1010110
+     *
+     * @param code    Huffman code book of the form character -> path
+     * @param outPath Path where the Huffman code collection is written to.
+     */
+    public void writeHuffmanToFile(Map<Character, String> code, Path outPath) throws IOException {
+        String output = code.keySet().stream()
+                .sorted()
+                .map(x -> String.format("%d:%s", (int) x, code.get(x)))
+                .collect(Collectors.joining("-"));
 
-
-
+        Files.writeString(outPath, output, StandardCharsets.US_ASCII);
+    }
 
 }
