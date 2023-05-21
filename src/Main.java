@@ -31,7 +31,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         Encode encode = new Encode();
-        encode.encode(ASCII_INPUT_PATH, COMPRESSED_INPUT_PATH, HUFFMAN_PATH);
+        //encode.encode(ASCII_INPUT_PATH, COMPRESSED_INPUT_PATH, HUFFMAN_PATH);
 
         Decode decode = new Decode();
         decode.decode(COMPRESSED_INPUT_PATH, HUFFMAN_PATH, DECOMPRESSED_INPUT_PATH);
